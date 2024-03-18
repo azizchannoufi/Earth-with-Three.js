@@ -78,3 +78,32 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+// Création de la géométrie d'un demi-cercle
+const radius = 1; // Rayon du demi-cercle
+const segments = 1 // Nombre de segments pour le cercle
+const arcAngle = 1; // Angle de l'arc (demi-cercle)
+const circleGeometry = new THREE.CircleGeometry(radius, segments, 5, arcAngle);
+
+// Création du matériau du demi-cercle
+const circleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+
+// Création du demi-cercle
+const circle = new THREE.Mesh(circleGeometry, circleMaterial);
+circle.rotation.x = Math.PI / 2; // Pour le placer dans le plan XY
+scene.add(circle);
+
+// Fonction pour animer le déplacement du cercle autour de la sphère
+function animateCircleMovement() {
+    new TWEEN.Tween({ angle: 2 })
+        .to({ angle: Math.PI * 2 }, 10000) // Un tour complet en 10 secondes
+        .onUpdate(({ angle }) => {
+            const radius = 2.2; // Rayon du cercle
+            const x = Math.cos(angle) * radius; // Calcul de la nouvelle position en X
+            const y = Math.sin(angle) * radius; // Calcul de la nouvelle position en Y
+            circle.position.set(x, y, 0); // Définition de la nouvelle position du cercle
+        })
+        .repeat(Infinity) // Répéter l'animation indéfiniment
+        .start(); // Démarrer l'animation
+}
+
+animateCircleMovement(); // Appeler la fonction pour démarrer l'animation de déplacement du cercle
